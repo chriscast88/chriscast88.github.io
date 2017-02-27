@@ -368,7 +368,7 @@ function drawBigAverageCircle() {
         ctx.fillStyle = bubble_avg_color;
     } else {
         rotation += bubble_avg_tick * 100;
-        value = avg*3;
+        value = avg*1.5;
         ctx.strokeStyle = bubble_avg_line_color_3;
         ctx.fillStyle = bubble_avg_color_3;
     }
