@@ -280,7 +280,7 @@ function drawBigStarField() {
 
     for (i = 0, len = bigStars.length; i < len; i++) {
         p = bigStars[i];
-        tick = (avg > AVG_BREAK_POINT) ? (avg/20) : (avg/50);
+        tick = (avg > 60) ? (avg/20) : (avg/80);
         p.y += p.dy * tick * 5;
         p.x += p.dx * tick * 5;
         p.z += p.dz;
@@ -633,6 +633,10 @@ function resizeHandler() {
     });
 
     avg_points.forEach(function(p) {
+        p.updateDynamics();
+    });
+
+    bigAvg_points.forEach(function(p) {
         p.updateDynamics();
     });
 }
