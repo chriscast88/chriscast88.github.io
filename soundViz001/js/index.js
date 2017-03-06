@@ -69,11 +69,6 @@ window.addEventListener('load', initialize, false);
 window.addEventListener('resize', resizeHandler, false);
 
 
-// var slider;
-// function setup(){
-//   colorMode(HSB, 255);
-//   slider = createSlider(0, 255, 127);
-// }
 
 function mouseClicked() {
   randomColor = "rgba("+ random(0,255) + ',' + random(0,255) + ',' + random(0,255) + ",1)";
@@ -179,7 +174,14 @@ function playAudio() {
     asource.connect(gainNode);
     pausedAt ? asource.start(0, pausedAt / 1000) : asource.start();
 
+
     animate();
+
+    drawBurst();
+    drawLargeCircle();
+    drawSmallCircle();
+
+
 }
 
 function pauseAudio() {
@@ -202,7 +204,7 @@ function clearCanvas() {
     var gradient = ctx.createLinearGradient(0, 0, 0, h);
 
     gradient.addColorStop(0, background_gradient_color_1);
-    gradient.addColorStop(0.96, background_gradient_color_2);
+    gradient.addColorStop(0.5, background_gradient_color_2);
     gradient.addColorStop(1, background_gradient_color_3);
 
     ctx.beginPath();
@@ -465,6 +467,135 @@ function drawWaveform() {
 }
 
 
+const COLORS = {
+  RED:      '#FD5061',
+  YELLOW:   '#FFCEA5',
+  BLACK:    '#29363B',
+  WHITE:    'white',
+  VINOUS:   '#A50710'
+}
+
+burstList = [];
+largeCircleList = [];
+smallCircleList = [];
+
+
+function Burst(){
+  burst = new mojs.Burst({
+    left: window.innerWidth/2, top: window.innerHeight/2,
+    count:          5,
+    radius:         { 50: 700 },
+    children: {
+      shape:        'line',
+      stroke:       [ 'white', '#ff005a', '#9dfc9d', '#B5BFD4', '#B8E986', '#D0D202' ],
+      scale:        1,
+      scaleX:       { 1 : 0 },
+      pathScale:    'rand(.5, 1.25)',
+      degreeShift:  'rand(-90, 90)',
+      radius:       'rand(20, 40)',
+      delay:        'rand(0, 150)',
+      isForce3d:    true,
+
+      },
+  });
+
+burst.play();
+
+}
+
+
+
+function drawBurst(){
+      maxCount = 5;
+
+      setInterval(function(){
+        burstCount = burstList.length;
+        if (avg > 70 && burstCount < maxCount){
+          burstList.push(new Burst());
+          }
+
+        },10);
+
+      setInterval(function(){
+        burstList.forEach(function(){
+          burstList.pop(this);
+          })
+        }, 2000);
+}
+
+
+
+function LargeCircle(){
+  circle = new mojs.Shape({
+    left: window.innerWidth/2, top: window.innerHeight/2,
+    scale:      { 0: 1 },
+    fill:       'none',
+    stroke:     'white',
+    strokeWidth: 60,
+    opacity:    { 1 : 0 },
+    radius:     600,
+    duration:   600,
+  });
+
+circle.play();
+
+}
+
+
+function drawLargeCircle(){
+      maxCount = 4;
+
+      setInterval(function(){
+        circleCount = largeCircleList.length;
+        if (avg > 90 && circleCount < maxCount){
+          largeCircleList.push(new LargeCircle());
+          }
+
+        },500);
+
+      setInterval(function(){
+        largeCircleList.forEach(function(){
+          largeCircleList.pop(this);
+          })
+        }, 2000);
+}
+
+function SmallCircle(){
+  circle = new mojs.Shape({
+    left: window.innerWidth/2, top: window.innerHeight/2,
+    scale:      { 0: 1 },
+    fill:       'none',
+    stroke:     'white',
+    strokeWidth: 3,
+    opacity:    { .75 : 0 },
+    radius:     400,
+    duration:   1200,
+  });
+
+circle.play();
+
+}
+
+
+function drawSmallCircle(){
+      maxCount = 4;
+
+      setInterval(function(){
+        circleCount = smallCircleList.length;
+        if (avg > 70 && circleCount < maxCount){
+          smallCircleList.push(new SmallCircle());
+          }
+
+        },50);
+
+      setInterval(function(){
+        smallCircleList.forEach(function(){
+          smallCircleList.pop(this);
+          })
+        }, 2000);
+}
+
+
 function animate() {
     if (!playing) return;
 
@@ -489,6 +620,12 @@ function animate() {
     if (SHOW_WAVEFORM) {
         drawWaveform();
     }
+
+
+
+    // drawBurst();
+
+
 
 }
 
